@@ -4,21 +4,39 @@ import { getUsage, postDemoScenario } from './api.js';
 const BudgetContext = createContext(null);
 
 const FULL_BUDGET = 1240; // matches backend SCENARIOS.safe
+const LS_KEY = 'ai-fuel-budget';
+
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
+function saveBudget(budget, max, scenario) {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify({ budget, max, scenario }));
+  } catch {}
+}
 
 export function BudgetProvider({ children }) {
-  const [budget, setBudget] = useState(FULL_BUDGET);
-  const [max, setMax] = useState(FULL_BUDGET);
-  const [status, setStatus] = useState('SAFE');
+  const saved = loadSaved();
+  const [budget, setBudget] = useState(saved?.budget ?? FULL_BUDGET);
+  const [max, setMax] = useState(saved?.max ?? FULL_BUDGET);
+  const [status, setStatus] = useState(deriveStatus(saved?.budget ?? FULL_BUDGET, saved?.max ?? FULL_BUDGET));
   const [floatBadges, setFloatBadges] = useState([]);
-  const [activeScenario, setActiveScenario] = useState('safe');
+  const [activeScenario, setActiveScenario] = useState(saved?.scenario ?? 'safe');
 
   useEffect(() => {
-    getUsage().then(data => {
-      // max is always the full/safe budget, not the current
-      setBudget(data.budget);
-      setMax(data.max ?? FULL_BUDGET);
-      setStatus(data.status);
-    }).catch(() => {});
+    // Only sync from backend if nothing is saved locally yet
+    if (!loadSaved()) {
+      getUsage().then(data => {
+        setBudget(data.budget);
+        setMax(data.max ?? FULL_BUDGET);
+        setStatus(data.status);
+        saveBudget(data.budget, data.max ?? FULL_BUDGET, 'safe');
+      }).catch(() => {});
+    }
   }, []);
 
   const animateTo = useCallback((newBudget, newMax, newStatus) => {
@@ -33,6 +51,8 @@ export function BudgetProvider({ children }) {
     });
     if (newMax !== undefined) setMax(newMax);
     if (newStatus !== undefined) setStatus(newStatus);
+    // Persist so refresh doesn't reset the value
+    saveBudget(newBudget, newMax ?? FULL_BUDGET, loadSaved()?.scenario ?? 'safe');
   }, []);
 
   const refreshBudget = useCallback(async () => {
@@ -54,6 +74,7 @@ export function BudgetProvider({ children }) {
       const data = await postDemoScenario(scenario);
       setActiveScenario(scenario);
       animateTo(data.budget, FULL_BUDGET, deriveStatus(data.budget, FULL_BUDGET));
+      saveBudget(data.budget, FULL_BUDGET, scenario);
     } catch (_) {}
   }, [animateTo]);
 
