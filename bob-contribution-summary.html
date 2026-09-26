@@ -1,0 +1,438 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bob Contribution Summary — AI Fuel</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 40px 20px 60px;
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #3c3c3c;
+  }
+  .header__icon {
+    font-size: 28px;
+  }
+  .header__title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #f0f0f0;
+  }
+  .header__sub {
+    font-size: 13px;
+    color: #858585;
+    margin-top: 2px;
+  }
+  .header__badge {
+    margin-left: auto;
+    background: rgba(79,195,247,0.12);
+    border: 1px solid #4fc3f7;
+    color: #4fc3f7;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'Consolas', monospace;
+    letter-spacing: 0.06em;
+    padding: 4px 10px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* Stats row */
+  .stats {
+    display: flex;
+    gap: 0;
+    border: 1px solid #3c3c3c;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+  .stat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 18px 12px;
+    border-right: 1px solid #3c3c3c;
+    background: #252526;
+  }
+  .stat:last-child { border-right: none; }
+  .stat__val {
+    font-family: 'Consolas', monospace;
+    font-size: 26px;
+    font-weight: 700;
+    color: #4fc3f7;
+  }
+  .stat__label {
+    font-size: 11px;
+    color: #858585;
+    margin-top: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: center;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 28px;
+  }
+  .section__title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #858585;
+    font-family: 'Consolas', monospace;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #2d2d2d;
+  }
+
+  /* File list */
+  .file-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .file-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #252526;
+    border: 1px solid #3c3c3c;
+    border-radius: 3px;
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+  .file-item__icon {
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .file-item__name {
+    font-family: 'Consolas', monospace;
+    color: #ce9178;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .file-item__tag {
+    font-size: 10px;
+    padding: 1px 5px;
+    border-radius: 2px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .tag-jsx  { background: #1a237e; color: #90caf9; }
+  .tag-css  { background: #1b3a1b; color: #a5d6a7; }
+  .tag-js   { background: #2d2d00; color: #fff176; }
+
+  /* Contribution list */
+  .contrib-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .contrib-item {
+    display: flex;
+    gap: 12px;
+    background: #252526;
+    border: 1px solid #3c3c3c;
+    border-radius: 3px;
+    padding: 11px 14px;
+  }
+  .contrib-item__num {
+    font-family: 'Consolas', monospace;
+    font-size: 12px;
+    color: #4fc3f7;
+    width: 20px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .contrib-item__body {}
+  .contrib-item__title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e0e0e0;
+    margin-bottom: 3px;
+  }
+  .contrib-item__desc {
+    font-size: 12px;
+    color: #858585;
+    line-height: 1.55;
+  }
+  .contrib-item__desc code {
+    font-family: 'Consolas', monospace;
+    font-size: 11px;
+    background: #333;
+    padding: 1px 4px;
+    border-radius: 2px;
+    color: #ce9178;
+  }
+
+  /* Fix list */
+  .fix-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .fix-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 9px 12px;
+    background: #252526;
+    border: 1px solid #3c3c3c;
+    border-left: 3px solid #f44336;
+    border-radius: 3px;
+    font-size: 12px;
+  }
+  .fix-item__label {
+    font-family: 'Consolas', monospace;
+    font-size: 10px;
+    color: #ef9a9a;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    width: 36px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .fix-item__text { color: #d4d4d4; line-height: 1.5; }
+  .fix-item__text code {
+    font-family: 'Consolas', monospace;
+    font-size: 11px;
+    background: #333;
+    padding: 1px 4px;
+    border-radius: 2px;
+    color: #ce9178;
+  }
+
+  /* Git section */
+  .git-block {
+    background: #0d1117;
+    border: 1px solid #3c3c3c;
+    border-radius: 4px;
+    padding: 14px 16px;
+    font-family: 'Consolas', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  .git-block .prompt { color: #4fc3f7; }
+  .git-block .cmd    { color: #d4d4d4; }
+  .git-block .out    { color: #66bb6a; }
+  .git-block .branch { color: #ce9178; }
+
+  /* Footer */
+  .footer {
+    margin-top: 48px;
+    padding-top: 16px;
+    border-top: 1px solid #2d2d2d;
+    text-align: center;
+    font-size: 12px;
+    color: #555;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  
+  <div class="header">
+    <span class="header__icon">⚡</span>
+    <div>
+      <div class="header__title">AI Fuel — Bob Contribution Summary</div>
+      <div class="header__sub">Frontend project · React + Vite · JavaScript</div>
+    </div>
+    <span class="header__badge">IBM Bob</span>
+  </div>
+
+  
+  <div class="stats">
+    <div class="stat">
+      <span class="stat__val">26</span>
+      <span class="stat__label">Files Created</span>
+    </div>
+    <div class="stat">
+      <span class="stat__val">7</span>
+      <span class="stat__label">Screens Built</span>
+    </div>
+    <div class="stat">
+      <span class="stat__val">13</span>
+      <span class="stat__label">API Functions</span>
+    </div>
+    <div class="stat">
+      <span class="stat__val">2</span>
+      <span class="stat__label">Git Branches Pushed</span>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section__title">Files Created</div>
+    <div class="file-grid">
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/api.js</span><span class="file-item__tag tag-js">JS</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/App.jsx</span><span class="file-item__tag tag-jsx">JSX</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/App.css</span><span class="file-item__tag tag-css">CSS</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/index.css</span><span class="file-item__tag tag-css">CSS</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/BudgetContext.jsx</span><span class="file-item__tag tag-jsx">JSX</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/WorkflowContext.jsx</span><span class="file-item__tag tag-jsx">JSX</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/BudgetDisplay.jsx</span><span class="file-item__tag tag-jsx">JSX</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/BudgetDisplay.css</span><span class="file-item__tag tag-css">CSS</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/Sidebar.jsx</span><span class="file-item__tag tag-jsx">JSX</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/Sidebar.css</span><span class="file-item__tag tag-css">CSS</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/Header.jsx</span><span class="file-item__tag tag-jsx">JSX</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/Header.css</span><span class="file-item__tag tag-css">CSS</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/pages/Workspace.jsx</span><span class="file-item__tag tag-jsx">JSX</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/pages/Workspace.css</span><span class="file-item__tag tag-css">CSS</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/pages/Analysis.jsx</span><span class="file-item__tag tag-jsx">JSX</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/pages/Analysis.css</span><span class="file-item__tag tag-css">CSS</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/pages/Execution.jsx</span><span class="file-item__tag tag-jsx">JSX</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/pages/Execution.css</span><span class="file-item__tag tag-css">CSS</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/pages/Trace.jsx</span><span class="file-item__tag tag-jsx">JSX</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/pages/Trace.css</span><span class="file-item__tag tag-css">CSS</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/pages/Rewards.jsx</span><span class="file-item__tag tag-jsx">JSX</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/pages/Rewards.css</span><span class="file-item__tag tag-css">CSS</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/pages/Plan.jsx</span><span class="file-item__tag tag-jsx">JSX</span></div>
+      <div class="file-item"><span class="file-item__icon">📄</span><span class="file-item__name">src/pages/Impact.jsx</span><span class="file-item__tag tag-jsx">JSX</span></div>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section__title">What Was Built</div>
+    <div class="contrib-list">
+      <div class="contrib-item">
+        <span class="contrib-item__num">01</span>
+        <div class="contrib-item__body">
+          <div class="contrib-item__title">API Service Module — <code>src/api.js</code></div>
+          <div class="contrib-item__desc">All 13 backend functions (<code>getUsage</code>, <code>postTask</code>, <code>postTrace</code>, etc.) wrapped in one module. Every function falls back to realistic local mock data when the backend at <code>localhost:3001</code> is unreachable, so the UI works fully standalone. No component calls <code>fetch</code> directly.</div>
+        </div>
+      </div>
+      <div class="contrib-item">
+        <span class="contrib-item__num">02</span>
+        <div class="contrib-item__body">
+          <div class="contrib-item__title">Budget Context + Animated Display</div>
+          <div class="contrib-item__desc"><code>BudgetContext</code> holds global credit state and exposes <code>applyBudgetUpdate</code> and <code>switchScenario</code>. <code>BudgetDisplay</code> tweens the number with a cubic ease-out over 300ms, animates the bar's width and color across green/yellow/red thresholds, and floats a <code>−N</code> / <code>+N</code> badge that fades upward on every change.</div>
+        </div>
+      </div>
+      <div class="contrib-item">
+        <span class="contrib-item__num">03</span>
+        <div class="contrib-item__body">
+          <div class="contrib-item__title">Workspace Screen (Screen 1)</div>
+          <div class="contrib-item__desc">Chat-style input with Ctrl+Enter shortcut. Calls <code>postTask</code> and navigates to Analysis on success. Shows a completion banner after returning from execution — including the names of any deferred tasks — and clears it as soon as a new request is typed.</div>
+        </div>
+      </div>
+      <div class="contrib-item">
+        <span class="contrib-item__num">04</span>
+        <div class="contrib-item__body">
+          <div class="contrib-item__title">Analysis Screen (Screen 2) — Decision Panel</div>
+          <div class="contrib-item__desc">Quotes the request back, lists all 6 tasks with cost / AI mode / priority badges. Shows three large stat numbers (Available / Estimated / After completion). Three outcome states: full budget covers all tasks → "Start work"; partial coverage → ranked plan with ✓/⚠/○ indicators and "Use recommended plan"; nothing fits → points to TRACE/Resets instead.</div>
+        </div>
+      </div>
+      <div class="contrib-item">
+        <span class="contrib-item__num">05</span>
+        <div class="contrib-item__body">
+          <div class="contrib-item__title">Execution Screen (Screen 3) — Full Flow</div>
+          <div class="contrib-item__desc">5-step timeline with ✓/●/○ states and AI mode badges. Right-side panel shows animated budget via <code>BudgetDisplay</code>, current task name, and budget-protection notes. At step 2, surfaces the scripted <code>401 Unauthorized</code> error inline. "See what this change affects" opens the Impact panel with the proposed fix and affected areas. "Apply fix" deducts 320 credits with animated feedback then resumes the remaining steps automatically. On completion, loops back to Workspace with a summary banner.</div>
+        </div>
+      </div>
+      <div class="contrib-item">
+        <span class="contrib-item__num">06</span>
+        <div class="contrib-item__body">
+          <div class="contrib-item__title">TRACE Screen — Streaming Investigation</div>
+          <div class="contrib-item__desc">4 stages (Diagnose → Find root cause → Minimal fix → Verify) that stream log lines one at a time (<code>&gt; scanning auth flow…</code>), then resolve each stage into a pinned result line. Only the Minimal fix stage costs 160 credits — deducted with animated budget feedback when it completes. If budget is critical on arrival, offers "Use Usage Limit Reset" and "Activate TRACE instead" side by side. Returns to Workspace with the completion banner.</div>
+        </div>
+      </div>
+      <div class="contrib-item">
+        <span class="contrib-item__num">07</span>
+        <div class="contrib-item__body">
+          <div class="contrib-item__title">Rewards Screen — Quiz + Milestone Bar</div>
+          <div class="contrib-item__desc">Shows 7-day streak, points, and reset count. Progress bar tracks position within the current 2,500-point window. Quiz question with 4 options — correct answer awards +50 points; if that crosses a 2,500-point multiple, a distinct milestone banner fires and the reset count increments. Wrong answer shows the correct answer plainly with no punishment. Starting points seeded at 2,460 so a single correct answer crosses the milestone during a demo.</div>
+        </div>
+      </div>
+      <div class="contrib-item">
+        <span class="contrib-item__num">08</span>
+        <div class="contrib-item__body">
+          <div class="contrib-item__title">Sidebar — Navigation + Demo Switcher</div>
+          <div class="contrib-item__desc">NavLinks with active accent highlight. Demo switcher (Safe / Low / Critical / Exhausted) calls <code>postDemoScenario</code> and animates the budget change — the active scenario button is highlighted. Max budget is always pinned to 1,240 so the bar shows the correct ratio in every scenario. Persistent animated <code>BudgetDisplay</code> at the bottom.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section__title">Bugs Found &amp; Fixed During Build</div>
+    <div class="fix-list">
+      <div class="fix-item">
+        <span class="fix-item__label">Bug</span>
+        <span class="fix-item__text"><strong>Demo switcher set <code>max = data.budget</code></strong> — switching to Critical (180 cr) made the bar show 100% green. Fixed: <code>max</code> is always pinned to 1,240; only <code>budget</code> changes.</span>
+      </div>
+      <div class="fix-item">
+        <span class="fix-item__label">Bug</span>
+        <span class="fix-item__text"><strong>Execution panel and TRACE header used raw <code>budget.toLocaleString()</code></strong> with a static bar — no tween, no float badge. Fixed: both now render <code>&lt;BudgetDisplay&gt;</code> so every spend animates consistently.</span>
+      </div>
+      <div class="fix-item">
+        <span class="fix-item__label">Bug</span>
+        <span class="fix-item__text"><strong>Milestone progress bar calculated as <code>(nextMilestone − pointsToGo) / nextMilestone</code></strong> — correct only at the first milestone; wrong after crossing 2,500 (e.g. next = 5,000 made the bar half-full when 2,460/2,500 earned). Fixed: always divides by the constant 2,500-point window.</span>
+      </div>
+      <div class="fix-item">
+        <span class="fix-item__label">Bug</span>
+        <span class="fix-item__text"><strong>Quiz feedback "N points to next reset" used stale pre-answer state</strong> minus awarded points. Fixed: reads from the already-updated <code>rewards</code> state after the API response.</span>
+      </div>
+      <div class="fix-item">
+        <span class="fix-item__label">Bug</span>
+        <span class="fix-item__text"><strong><code>refreshBudget</code> referenced <code>animateTo</code> before it was declared</strong> in the context module. Fixed: reordered declarations so <code>animateTo</code> is defined first.</span>
+      </div>
+      <div class="fix-item">
+        <span class="fix-item__label">Bug</span>
+        <span class="fix-item__text"><strong>Workspace used a dynamic <code>import()</code> for <code>api.js</code></strong> causing a Vite warning (module already statically imported elsewhere). Fixed: converted to a normal static import.</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section__title">Git — Pushed to GitHub</div>
+    <div class="git-block">
+      <div><span class="prompt">$</span> <span class="cmd">git remote -v</span></div>
+      <div><span class="out">origin  https://github.com/dana-ghanem/Trace-IBM-BOB.git</span></div>
+      <br />
+      <div><span class="prompt">$</span> <span class="cmd">git push origin main --force</span></div>
+      <div><span class="out">+ 9f72bc3 main → <span class="branch">main</span> (forced update)</span></div>
+      <br />
+      <div><span class="prompt">$</span> <span class="cmd">git push origin main:hanan --force</span></div>
+      <div><span class="out">+ 9f72bc3 main → <span class="branch">hanan</span> (forced update)</span></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Made with IBM Bob
+  </div>
+
+</div>
+</body>
+</html>
