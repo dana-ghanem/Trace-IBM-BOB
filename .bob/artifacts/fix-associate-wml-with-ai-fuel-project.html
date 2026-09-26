@@ -1,0 +1,88 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fix: Associate WML</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; font-size: 14px; line-height: 1.6; background: #ffffff; color: #1f2328; padding: 32px 16px; }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .sub { color: #57606a; font-size: 13px; margin-bottom: 28px; }
+  .error-box { background: #fff5f5; border: 1px solid #fca5a5; border-radius: 6px; padding: 14px 16px; margin-bottom: 28px; font-size: 13px; }
+  .error-box code { background: #fee2e2; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 12px; }
+  .steps { display: flex; flex-direction: column; gap: 16px; }
+  .step { display: flex; gap: 16px; align-items: flex-start; background: #f7f8fa; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; }
+  .num { min-width: 28px; height: 28px; border-radius: 50%; background: #3b82d4; color: #fff; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .step-body { flex: 1; }
+  .step-title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .step-desc { color: #57606a; font-size: 13px; }
+  .step-desc code { background: #e5e7eb; padding: 1px 5px; border-radius: 3px; font-family: monospace; font-size: 12px; }
+  .highlight { border-left: 3px solid #3b82d4; }
+  .tag { display: inline-block; background: #3b82d4; color: #fff; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 3px; margin-left: 6px; vertical-align: middle; }
+  .note { background: #f0f6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 12px 16px; margin-top: 24px; font-size: 13px; color: #1e40af; }
+  footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 12px; color: #57606a; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Fix watsonx.ai — Associate WML Service</h1>
+  <p class="sub">Your project returns 403 because it has no Watson Machine Learning instance linked.</p>
+
+  <div class="error-box">
+    <strong>Root cause:</strong> <code>no_associated_service_instance_error</code> — project <code>566d0899-d717-49fb-b9b3-6f9edb9bf1b5</code> is not associated with a WML instance.
+  </div>
+
+  <div class="steps">
+
+    <div class="step highlight">
+      <div class="num">1</div>
+      <div class="step-body">
+        <div class="step-title">You are already here — click "Services &amp; integrations" <span class="tag">YOU ARE HERE</span></div>
+        <div class="step-desc">In the left sidebar of your AI fuel project → Manage tab → click <strong>Services &amp; integrations</strong>.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">2</div>
+      <div class="step-body">
+        <div class="step-title">Click "Associate service"</div>
+        <div class="step-desc">A button labeled <strong>Associate service</strong> (or <strong>+ Add service</strong>) will appear on that page. Click it.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">3</div>
+      <div class="step-body">
+        <div class="step-title">Select Watson Machine Learning</div>
+        <div class="step-desc">From the list of available services, select your <strong>Watson Machine Learning</strong> instance. If none exists, click <strong>New service</strong> → choose <strong>Watson Machine Learning</strong> → pick the <strong>Lite (free)</strong> plan → create it.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">4</div>
+      <div class="step-body">
+        <div class="step-title">Click "Associate"</div>
+        <div class="step-desc">Confirm the association. The WML instance will now appear under Services &amp; integrations for this project.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">5</div>
+      <div class="step-body">
+        <div class="step-title">Restart the backend</div>
+        <div class="step-desc">In your terminal inside <code>ai-fuel-backend/</code>, stop the server and run <code>node server.js</code> again. The real watsonx.ai tasks will now appear instead of the hardcoded fallback.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="note">
+    ✅ After this fix, submitting <em>"fix the api, add security, fix ui/ux"</em> will return AI-generated tasks from IBM Granite — not the hardcoded fallback list.
+  </div>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+</body>
+</html>

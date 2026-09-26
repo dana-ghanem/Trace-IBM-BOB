@@ -1,0 +1,229 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AI Fuel — Improvement Plan</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Segoe UI",system-ui,sans-serif;font-size:14px;line-height:1.6;background:#fff;color:#1f2328;padding:32px 16px}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:22px;font-weight:800;margin-bottom:4px}
+  .lead{color:#57606a;font-size:13px;margin-bottom:32px}
+  h2{font-size:15px;font-weight:700;margin:28px 0 12px;padding-bottom:6px;border-bottom:2px solid #e5e7eb;text-transform:uppercase;letter-spacing:.04em;color:#1f2328}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
+  .card{background:#f7f8fa;border:1px solid #e5e7eb;border-radius:8px;padding:14px 16px}
+  .card-title{font-weight:700;font-size:13px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .card-body{font-size:12px;color:#57606a;line-height:1.6}
+  .tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;white-space:nowrap}
+  .t-vis{background:#dbeafe;color:#1d4ed8}
+  .t-tech{background:#dcfce7;color:#15803d}
+  .t-ux{background:#fef3c7;color:#92400e}
+  .t-new{background:#ede9fe;color:#6d28d9}
+  .flow{display:flex;flex-direction:column;gap:0}
+  .flow-step{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #e5e7eb}
+  .flow-step:last-child{border-bottom:none}
+  .flow-num{min-width:28px;height:28px;border-radius:50%;background:#1f2328;color:#fff;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+  .flow-title{font-weight:700;font-size:13px}
+  .flow-desc{font-size:12px;color:#57606a;margin-top:2px}
+  .flow-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+  .now{border-left:3px solid #e5e7eb;padding-left:10px}
+  .after{border-left:3px solid #3b82d4;padding-left:10px}
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .compare-col{background:#f7f8fa;border:1px solid #e5e7eb;border-radius:8px;padding:14px}
+  .compare-col h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px;color:#57606a}
+  .compare-col ul{list-style:none;padding:0}
+  .compare-col li{font-size:12px;padding:3px 0;color:#57606a}
+  .compare-col li::before{content:"✗ ";color:#ef4444}
+  .after-col li::before{content:"✓ ";color:#22c55e}
+  .after-col{border-color:#bfdbfe;background:#eff6ff}
+  .after-col h3{color:#1d4ed8}
+  .priority{display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+  .p-tag{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid}
+  .p1{background:#fef2f2;border-color:#fca5a5;color:#b91c1c}
+  .p2{background:#fff7ed;border-color:#fdba74;color:#c2410c}
+  .p3{background:#f0fdf4;border-color:#86efac;color:#15803d}
+  footer{margin-top:40px;padding-top:16px;border-top:1px solid #e5e7eb;text-align:center;font-size:12px;color:#57606a}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>AI Fuel — Improvement Plan</h1>
+  <p class="lead">Visual, technical, and UX upgrades for a production-ready AI budget platform</p>
+
+  
+  <h2>Improved User Flow</h2>
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-num">1</div>
+      <div>
+        <div class="flow-title">Workspace — Task Input</div>
+        <div class="flow-desc">User types task request. Live token estimator shows projected credit cost as they type. Smart suggestions appear based on task keywords.</div>
+        <div class="flow-tags"><span class="tag t-vis">Visual</span><span class="tag t-tech">Technical</span></div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">2</div>
+      <div>
+        <div class="flow-title">Analysis — AI Task Breakdown</div>
+        <div class="flow-desc">Tasks animate in one-by-one as AI generates them (streaming). Budget fit visualized as a stacked bar. User can drag to reorder or deselect tasks before confirming.</div>
+        <div class="flow-tags"><span class="tag t-vis">Visual</span><span class="tag t-ux">UX</span></div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">3</div>
+      <div>
+        <div class="flow-title">Plan — Budget Optimizer</div>
+        <div class="flow-desc">Interactive drag-and-drop plan editor. Swap tasks between "In plan" and "Deferred". Real-time budget recalculation. Add custom tasks manually.</div>
+        <div class="flow-tags"><span class="tag t-ux">UX</span><span class="tag t-tech">Technical</span></div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">4</div>
+      <div>
+        <div class="flow-title">Execution — Live Progress</div>
+        <div class="flow-desc">Animated terminal-style logs stream per step. Budget meter ticks down visually. Errors surface with one-click TRACE activation. Side-by-side before/after code diff on fix apply.</div>
+        <div class="flow-tags"><span class="tag t-vis">Visual</span><span class="tag t-ux">UX</span></div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">5</div>
+      <div>
+        <div class="flow-title">TRACE — Root Cause Analysis</div>
+        <div class="flow-desc">Each stage now shows a real file path, line number, and code snippet. Impact graph shows which files/modules are affected as a visual dependency tree.</div>
+        <div class="flow-tags"><span class="tag t-vis">Visual</span><span class="tag t-tech">Technical</span></div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">6</div>
+      <div>
+        <div class="flow-title">Rewards — Gamification Hub</div>
+        <div class="flow-desc">Daily challenge streak with calendar heatmap. Leaderboard (team mode). Animated confetti on milestone. Earned badges gallery. Reset usage shown as a consumable inventory.</div>
+        <div class="flow-tags"><span class="tag t-vis">Visual</span><span class="tag t-new">New Feature</span></div>
+      </div>
+    </div>
+  </div>
+
+  
+  <h2>Visual Improvements</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="card-title"><span class="tag t-vis">Visual</span> Animated Budget Bar</div>
+      <div class="card-body">Replace static bar with a segmented, animated bar that ticks down in real-time during execution. Color transitions: green → yellow → red as budget depletes.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="tag t-vis">Visual</span> Task Cards Redesign</div>
+      <div class="card-body">Replace plain rows with cards that have a left color stripe per priority, mode icon, and a micro chart showing relative cost vs. total budget.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="tag t-vis">Visual</span> Execution Timeline</div>
+      <div class="card-body">Vertical stepper with connecting animated line. Active step pulses. Completed steps show checkmark with elapsed time. Error step glows red.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="tag t-vis">Visual</span> TRACE Dependency Graph</div>
+      <div class="card-body">SVG node graph showing which files/modules are affected by the fix. Nodes colored by impact severity. Replaces the plain checkbox list.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="tag t-vis">Visual</span> Onboarding Empty States</div>
+      <div class="card-body">Illustrated empty states for each page when no data exists. Guides user to the next action rather than a blank screen.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="tag t-vis">Visual</span> Budget Float Badges</div>
+      <div class="card-body">Enhance existing float badges — add color (red for deductions, green for resets), larger font, and a brief blur-in animation for delight.</div>
+    </div>
+  </div>
+
+  
+  <h2>Technical Improvements</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="card-title"><span class="tag t-tech">Technical</span> Streaming AI Response</div>
+      <div class="card-body">Use watsonx.ai streaming API so tasks appear one-by-one as the model generates them instead of waiting for the full response. Use SSE or chunked transfer.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="tag t-tech">Technical</span> Persistent State</div>
+      <div class="card-body">Save WorkflowContext to sessionStorage so refreshing the page doesn't lose the current plan and analysis. Budget state synced with backend on every change.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="tag t-tech">Technical</span> Real Execution Logs</div>
+      <div class="card-body">Backend generates step-specific logs from watsonx.ai for each task (e.g. actual OAuth fix steps). Currently hardcoded to 5 generic steps.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="tag t-tech">Technical</span> Route Guards</div>
+      <div class="card-body">Prevent direct navigation to /analysis, /execution, /plan without valid state. Redirect back to Workspace with a clear message instead of a broken empty page.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="tag t-tech">Technical</span> Real Impact Analysis</div>
+      <div class="card-body">The /impact and /trace routes currently return hardcoded mock data. Wire them to watsonx.ai to return real diagnosis based on the actual error encountered during execution.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="tag t-tech">Technical</span> API Error Toasts</div>
+      <div class="card-body">Add a global toast/notification system for API errors. Currently errors are silently swallowed into mock fallbacks with no user feedback.</div>
+    </div>
+  </div>
+
+  
+  <h2>New Features</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="card-title"><span class="tag t-new">New</span> Task History</div>
+      <div class="card-body">A history page showing past submitted requests, their cost, and outcome. Stored in localStorage. Helps users learn from past budget decisions.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="tag t-new">New</span> Budget Forecast</div>
+      <div class="card-body">After analysis, show a chart: "At this usage rate, your budget runs out in X days." Gives developers a planning horizon.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="tag t-new">New</span> Custom Task Editor</div>
+      <div class="card-body">Let users manually add, edit, or remove tasks from the AI-generated plan before execution. Includes cost slider and mode selector.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="tag t-new">New</span> AI Mode Explainer</div>
+      <div class="card-body">Tooltip/modal explaining what Lightweight, Balanced, and Advanced AI modes mean in terms of model quality, speed, and cost — so users can make informed choices.</div>
+    </div>
+  </div>
+
+  
+  <h2>Before vs After</h2>
+  <div class="compare">
+    <div class="compare-col">
+      <h3>Current State</h3>
+      <ul>
+        <li>Hardcoded fallback tasks always shown</li>
+        <li>Static task list, no interactivity</li>
+        <li>State lost on page refresh</li>
+        <li>Generic 5-step execution regardless of task</li>
+        <li>Impact/Trace return mocked data</li>
+        <li>No navigation guards</li>
+        <li>Single hardcoded quiz question</li>
+        <li>No feedback on API errors</li>
+      </ul>
+    </div>
+    <div class="compare-col after-col">
+      <h3>After Improvements</h3>
+      <ul>
+        <li>Real AI-generated tasks from watsonx.ai</li>
+        <li>Draggable, editable task cards</li>
+        <li>State persisted in sessionStorage</li>
+        <li>Dynamic steps generated per task plan</li>
+        <li>Real AI-powered impact and trace analysis</li>
+        <li>Route guards with clear redirects</li>
+        <li>Rotating quiz questions from AI</li>
+        <li>Global toast notifications for errors</li>
+      </ul>
+    </div>
+  </div>
+
+  
+  <h2>Suggested Priority</h2>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div><span class="p-tag p1">🔴 High — Do First</span><span style="font-size:12px;color:#57606a;margin-left:10px">Route guards · Persistent state · Real execution logs · API error toasts</span></div>
+    <div><span class="p-tag p2">🟠 Medium — Next</span><span style="font-size:12px;color:#57606a;margin-left:10px">Streaming AI response · Animated budget bar · Task cards redesign · Real impact analysis</span></div>
+    <div><span class="p-tag p3">🟢 Nice to Have</span><span style="font-size:12px;color:#57606a;margin-left:10px">TRACE dependency graph · Task history · Budget forecast · Custom task editor</span></div>
+  </div>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+</body>
+</html>

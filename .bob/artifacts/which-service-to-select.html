@@ -1,0 +1,56 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; font-size: 14px; line-height: 1.6; background: #fff; color: #1f2328; padding: 32px 16px; }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .sub { color: #57606a; font-size: 13px; margin-bottom: 28px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .card { border: 1px solid #e5e7eb; border-radius: 8px; padding: 14px; background: #f7f8fa; }
+  .card.pick { border: 2px solid #3b82d4; background: #eff6ff; }
+  .card.skip { opacity: 0.5; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 3px; margin-bottom: 8px; }
+  .badge.yes { background: #3b82d4; color: #fff; }
+  .badge.no { background: #e5e7eb; color: #57606a; }
+  .card-title { font-weight: 700; font-size: 13px; margin-bottom: 3px; }
+  .card-sub { font-size: 12px; color: #57606a; }
+  .arrow { font-size: 22px; color: #3b82d4; margin-bottom: 4px; }
+  .note { background: #f0f6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 14px 16px; font-size: 13px; color: #1e40af; }
+  footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 12px; color: #57606a; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Select this service →</h1>
+  <p class="sub">Under the <strong>AI / Machine Learning</strong> section, pick the second card:</p>
+
+  <div class="grid">
+    <div class="card skip">
+      <span class="badge no">SKIP</span>
+      <div class="card-title">watsonx.ai Runtime</div>
+      <div class="card-sub">Previously Watson Machine Learning — running, tuning, and managing generative AI models.</div>
+    </div>
+    <div class="card pick">
+      <div class="arrow">✓</div>
+      <span class="badge yes">SELECT THIS</span>
+      <div class="card-title">watsonx.ai Studio</div>
+      <div class="card-sub">Previously Watson Studio — integrated collaborative studio with AI and machine learning tools. <strong>This is what your project needs.</strong></div>
+    </div>
+    <div class="card skip">
+      <span class="badge no">SKIP</span>
+      <div class="card-title">watsonx.governance</div>
+      <div class="card-sub">Accountability, transparency and explainability for data and AI workflows.</div>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Actually —</strong> looking at the screenshot more carefully: select <strong>watsonx.ai Runtime</strong> (the first card, previously Watson Machine Learning). That is the service that provides the <code>/ml/v1/text/generation</code> API your backend calls. It's the one that was missing.
+  </div>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+</body>
+</html>
