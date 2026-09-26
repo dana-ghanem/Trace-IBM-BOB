@@ -245,28 +245,55 @@ export default function Execution() {
       {/* Right panel */}
       <aside className="execution__panel">
         <BudgetDisplay budget={budget} max={max} status={status} floatBadges={floatBadges} compact />
-        <div style={{ marginBottom: 14 }} />
 
-        {currentStep >= 0 && currentStep < STEPS.length && phase === 'running' && (
-          <div className="execution__panel-section">
-            <div className="execution__panel-section-title">Current task</div>
-            <div className="execution__panel-current-task">{STEPS[currentStep].label}</div>
+        {/* Task checklist */}
+        <div className="execution__panel-section">
+          <div className="execution__panel-section-title">Tasks</div>
+          <div className="exec-task-list">
+            {(plan || []).map((t, i) => {
+              // map plan task index to STEPS index by name match or position
+              const stepIdx = STEPS.findIndex(s => s.label === t.name);
+              const effectiveIdx = stepIdx >= 0 ? stepIdx : i;
+              const isDone      = t.fits && completedSteps.includes(effectiveIdx);
+              const isActive    = t.fits && currentStep === effectiveIdx && phase === 'running';
+              const isPending   = t.fits && !isDone && !isActive;
+              const isDeferred  = !t.fits;
+
+              // "when can we do it" — estimate budget needed above current
+              const budgetNeeded = isDeferred ? Math.max(0, t.cost - budget) : 0;
+
+              let cls = 'task-pending';
+              let icon = '○';
+              if (isDone)     { cls = 'task-done';     icon = '✓'; }
+              else if (isActive)   { cls = 'task-active';   icon = '●'; }
+              else if (isDeferred) { cls = 'task-deferred'; icon = '–'; }
+
+              return (
+                <div key={t.id} className={`exec-task-item ${cls}`}>
+                  <span className="exec-task-icon">{icon}</span>
+                  <span className="exec-task-body">
+                    <span className="exec-task-name" title={t.name}>{t.name}</span>
+                    <span className="exec-task-cost">{t.cost} cr · {t.mode}</span>
+                    {isDeferred && (
+                      <span className="exec-task-when">
+                        {budgetNeeded > 0
+                          ? `needs +${budgetNeeded} more credits`
+                          : `needs ${t.cost} credits`}
+                      </span>
+                    )}
+                  </span>
+                </div>
+              );
+            })}
           </div>
-        )}
-
-        <div className="execution__panel-section" style={{ marginTop: 16 }}>
-          <div className="execution__panel-section-title">AI Fuel is protecting your budget</div>
-          <ul className="execution__panel-protect">
-            <li>Critical work prioritized</li>
-            <li>Advanced AI reserved for complex work</li>
-            <li>Lightweight AI used for routine work</li>
-          </ul>
         </div>
+
+        <hr className="execution__panel-section-divider" />
 
         {(status === 'CRITICAL' || status === 'WARNING') && (
           <button
             className="btn-secondary"
-            style={{ marginTop: 16, width: '100%', fontSize: 12 }}
+            style={{ width: '100%', fontSize: 12 }}
             onClick={() => navigate('/trace')}
           >
             Activate TRACE
