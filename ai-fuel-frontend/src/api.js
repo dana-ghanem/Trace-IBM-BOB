@@ -1,4 +1,5 @@
-const BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+// All calls use relative /api/ paths — works on Vercel and locally via Vite proxy
+const BASE = '/api';
 
 const TASKS_MOCK = [
   { id: 1, name: 'Add OAuth authentication',           cost: 420, mode: 'Advanced AI',     priority: 'Critical' },
@@ -10,10 +11,18 @@ const TASKS_MOCK = [
 ];
 
 const SCENARIOS_MOCK = { safe: 1240, low: 950, critical: 180, exhausted: 0 };
-let mockState = { budget: 1240, scenario: 'safe', points: 2460, resets: 1, streak: 7 };
+const RESET_MILESTONE = 2500;
+
+// Read persisted state from localStorage
+function getLocalBudget() {
+  try { return JSON.parse(localStorage.getItem('ai-fuel-budget') || 'null'); } catch { return null; }
+}
+function getLocalRewards() {
+  try { return JSON.parse(localStorage.getItem('ai-fuel-rewards') || 'null'); } catch { return null; }
+}
 
 function budgetStatus(budget, max) {
-  const r = budget / max;
+  const r = max > 0 ? budget / max : 0;
   if (r > 0.5) return 'SAFE';
   if (r > 0.2) return 'WARNING';
   return 'CRITICAL';
@@ -40,22 +49,25 @@ async function apiFetch(path, options = {}) {
   return res.json();
 }
 
-// GET /usage
+// GET /api/usage
 export async function getUsage() {
   try {
     return await apiFetch('/usage');
   } catch {
-    const max = SCENARIOS_MOCK[mockState.scenario] || 1240;
-    return { budget: mockState.budget, max, status: budgetStatus(mockState.budget, max) };
+    const saved = getLocalBudget();
+    const budget = saved?.budget ?? 1240;
+    const max = saved?.max ?? 1240;
+    return { budget, max, status: budgetStatus(budget, max) };
   }
 }
 
-// POST /task
+// POST /api/task  — pass current budget so server can compute plan
 export async function postTask(requestText) {
+  const saved = getLocalBudget();
+  const budget = saved?.budget ?? 1240;
   try {
-    return await apiFetch('/task', { method: 'POST', body: JSON.stringify({ request: requestText }) });
+    return await apiFetch('/task', { method: 'POST', body: JSON.stringify({ request: requestText, budget }) });
   } catch {
-    const budget = mockState.budget;
     const plan = planFor(budget);
     const fitCount = plan.filter(t => t.fits).length;
     return {
@@ -69,16 +81,16 @@ export async function postTask(requestText) {
   }
 }
 
-// POST /task/start
+// POST /api/task/start
 export async function postTaskStart() {
   try {
     return await apiFetch('/task/start', { method: 'POST', body: '{}' });
   } catch {
-    return { started: true, plan: planFor(mockState.budget) };
+    return { started: true };
   }
 }
 
-// POST /task/progress
+// POST /api/task/progress
 export async function postTaskProgress(step) {
   try {
     return await apiFetch('/task/progress', { method: 'POST', body: JSON.stringify({ step }) });
@@ -97,7 +109,7 @@ export async function postTaskProgress(step) {
   }
 }
 
-// POST /impact
+// POST /api/impact
 export async function postImpact() {
   try {
     return await apiFetch('/impact', { method: 'POST', body: '{}' });
@@ -109,27 +121,31 @@ export async function postImpact() {
   }
 }
 
-// POST /impact/apply
+// POST /api/impact/apply — pass current budget so server can deduct
 export async function postImpactApply() {
+  const saved = getLocalBudget();
+  const budget = saved?.budget ?? 0;
   try {
-    return await apiFetch('/impact/apply', { method: 'POST', body: '{}' });
+    return await apiFetch('/impact/apply', { method: 'POST', body: JSON.stringify({ budget }) });
   } catch {
-    mockState.budget = Math.max(0, mockState.budget - 320);
-    return { budget: mockState.budget, critical: mockState.budget < 300 };
+    const newBudget = Math.max(0, budget - 320);
+    return { budget: newBudget, critical: newBudget < 300 };
   }
 }
 
-// POST /task/finish
+// POST /api/task/finish
 export async function postTaskFinish(plan) {
+  const saved = getLocalBudget();
+  const budget = saved?.budget ?? 0;
   try {
-    return await apiFetch('/task/finish', { method: 'POST', body: JSON.stringify({ plan }) });
+    return await apiFetch('/task/finish', { method: 'POST', body: JSON.stringify({ plan, budget }) });
   } catch {
     const completed = (plan || []).filter(t => t.fits).length;
-    return { tasksCompleted: completed, tasksTotal: TASKS_MOCK.length, budgetRemaining: mockState.budget };
+    return { tasksCompleted: completed, tasksTotal: TASKS_MOCK.length, budgetRemaining: budget };
   }
 }
 
-// POST /trace
+// POST /api/trace
 export async function postTrace() {
   try {
     return await apiFetch('/trace', { method: 'POST', body: '{}' });
@@ -146,71 +162,66 @@ export async function postTrace() {
   }
 }
 
-// POST /trace/stage-complete
+// POST /api/trace/stage-complete — pass current budget
 export async function postTraceStageComplete(stageIndex) {
+  const saved = getLocalBudget();
+  const budget = saved?.budget ?? 0;
   try {
-    return await apiFetch('/trace/stage-complete', { method: 'POST', body: JSON.stringify({ stageIndex }) });
+    return await apiFetch('/trace/stage-complete', { method: 'POST', body: JSON.stringify({ stageIndex, budget }) });
   } catch {
-    if (stageIndex === 2) {
-      mockState.budget = Math.max(0, mockState.budget - 160);
-    }
-    return { budget: mockState.budget };
+    const cost = stageIndex === 2 ? 160 : 0;
+    return { budget: Math.max(0, budget - cost) };
   }
 }
 
-// GET /rewards
+// GET /api/rewards
 export async function getRewards() {
   try {
     return await apiFetch('/rewards');
   } catch {
-    const next = Math.ceil(mockState.points / 2500) * 2500;
-    return {
-      points: mockState.points,
-      resets: mockState.resets,
-      streak: mockState.streak,
-      nextMilestone: next,
-      pointsToNextMilestone: next - mockState.points,
-    };
+    const saved = getLocalRewards();
+    const points = saved?.points ?? 2460;
+    const resets = saved?.resets ?? 1;
+    const next = Math.ceil((points + 1) / RESET_MILESTONE) * RESET_MILESTONE;
+    return { points, resets, streak: saved?.streak ?? 7, nextMilestone: next, pointsToNextMilestone: next - points };
   }
 }
 
-// POST /rewards/quiz
+// POST /api/rewards/quiz — pass current points/resets so server can compute new values
 export async function postRewardsQuiz(correct) {
+  const saved = getLocalRewards();
+  const points = saved?.points ?? 0;
+  const resets = saved?.resets ?? 0;
   try {
-    return await apiFetch('/rewards/quiz', { method: 'POST', body: JSON.stringify({ correct }) });
+    return await apiFetch('/rewards/quiz', { method: 'POST', body: JSON.stringify({ correct, points, resets }) });
   } catch {
-    if (!correct) {
-      return { correct: false, pointsAwarded: 0, points: mockState.points, milestonesCrossed: 0, resets: mockState.resets };
-    }
-    const before = mockState.points;
-    mockState.points += 50;
-    const milestonesBefore = Math.floor(before / 2500);
-    const milestonesAfter  = Math.floor(mockState.points / 2500);
-    const milestonesCrossed = milestonesAfter - milestonesBefore;
-    if (milestonesCrossed > 0) mockState.resets += milestonesCrossed;
-    return { correct: true, pointsAwarded: 50, points: mockState.points, milestonesCrossed, resets: mockState.resets };
+    if (!correct) return { correct: false, pointsAwarded: 0, points, milestonesCrossed: 0, resets };
+    const newPoints = points + 50;
+    const milestonesCrossed = Math.floor(newPoints / RESET_MILESTONE) - Math.floor(points / RESET_MILESTONE);
+    return { correct: true, pointsAwarded: 50, points: newPoints, milestonesCrossed, resets: resets + milestonesCrossed };
   }
 }
 
-// POST /rewards/reset
+// POST /api/rewards/reset — pass resets count and scenario
 export async function postRewardsReset() {
+  const saved = getLocalBudget();
+  const savedR = getLocalRewards();
+  const resets = savedR?.resets ?? 0;
+  const scenario = saved?.scenario ?? 'safe';
+  if (resets <= 0) throw Object.assign(new Error('No Usage Limit Resets available'), { status: 400 });
   try {
-    return await apiFetch('/rewards/reset', { method: 'POST', body: '{}' });
+    return await apiFetch('/rewards/reset', { method: 'POST', body: JSON.stringify({ resets, scenario }) });
   } catch {
-    if (mockState.resets <= 0) throw Object.assign(new Error('No Usage Limit Resets available'), { status: 400 });
-    mockState.resets -= 1;
-    mockState.budget = SCENARIOS_MOCK[mockState.scenario] || 1240;
-    return { budget: mockState.budget, resetsRemaining: mockState.resets };
+    const newBudget = SCENARIOS_MOCK[scenario] ?? 1240;
+    return { budget: newBudget, resetsRemaining: resets - 1 };
   }
 }
 
-// POST /demo/scenario
+// POST /api/demo/scenario
 export async function postDemoScenario(scenario) {
   try {
     return await apiFetch('/demo/scenario', { method: 'POST', body: JSON.stringify({ scenario }) });
   } catch {
-    mockState.scenario = scenario;
-    mockState.budget = SCENARIOS_MOCK[scenario] ?? 1240;
-    return { budget: mockState.budget, scenario };
+    return { budget: SCENARIOS_MOCK[scenario] ?? 1240, scenario };
   }
 }
