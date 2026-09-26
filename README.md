@@ -1,46 +1,16 @@
-# AI Fuel
+# React + Vite
 
-> A developer tool that estimates AI-credit costs, plans what fits in your budget, and protects your remaining credits.
+This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
-## Project Structure
+Currently, two official plugins are available:
 
-```
-Trace-IBM-BOB/
-├── ai-fuel-backend/        # Node.js + Express API (port 3001)
-│   ├── routes/             # One file per resource group
-│   ├── data.js             # In-memory state & constants
-│   ├── watsonx.js          # IBM watsonx.ai integration
-│   └── server.js           # App entry point
-│
-└── ai-fuel-frontend/       # React + Vite UI (port 5173)
-    ├── public/
-    └── src/
-        ├── components/     # Reusable UI components
-        └── pages/          # Route-level page components
-```
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## Branches
+## React Compiler
 
-| Branch     | Purpose                          |
-|------------|----------------------------------|
-| `main`     | Project structure & overview     |
-| `backend`  | Node.js/Express backend (done)   |
-| `frontend` | React/Vite frontend (coming)     |
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Quick Start
+## Expanding the Oxlint configuration
 
-### Backend
-```bash
-cd ai-fuel-backend
-npm install
-# add .env with WATSONX_API_KEY, WATSONX_PROJECT_ID, WATSONX_URL
-npm start        # http://localhost:3001
-npm run dev      # with nodemon
-```
-
-### Frontend
-```bash
-cd ai-fuel-frontend
-npm install
-npm run dev      # http://localhost:5173
-```
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
