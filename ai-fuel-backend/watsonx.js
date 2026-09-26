@@ -50,7 +50,7 @@ async function generateText(prompt) {
   const requestBody = JSON.stringify({
     input: prompt,
     parameters: { decoding_method: 'greedy', max_new_tokens: 300 },
-    model_id: 'ibm/granite-13b-instruct-v2',
+    model_id: 'meta-llama/llama-3-3-70b-instruct',
     project_id: projectId,
   });
 
@@ -96,9 +96,10 @@ async function analyzeRequest(userRequest) {
 
   const raw = await generateText(prompt);
 
-  // Strip optional markdown code fences
-  const cleaned = raw.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-  const tasks = JSON.parse(cleaned);
+  // Extract the JSON array — strip markdown fences and any leading/trailing text
+  const match = raw.match(/\[[\s\S]*\]/);
+  if (!match) throw new Error('No JSON array found in model response');
+  const tasks = JSON.parse(match[0]);
 
   if (!Array.isArray(tasks) || tasks.length === 0) throw new Error('Empty or non-array task list');
 
