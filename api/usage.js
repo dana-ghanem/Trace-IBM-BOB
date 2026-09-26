@@ -1,6 +1,5 @@
 // GET /api/usage
-// Budget state is managed client-side; this returns the safe max for first-load
-const { SCENARIOS } = require('../../lib/data');
+const { SCENARIOS } = require('../lib/data');
 
 module.exports = function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');

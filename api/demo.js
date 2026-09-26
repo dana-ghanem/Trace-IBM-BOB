@@ -1,5 +1,5 @@
 // POST /api/demo/scenario
-const { SCENARIOS } = require('../../lib/data');
+const { SCENARIOS } = require('../lib/data');
 
 module.exports = function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -9,9 +9,8 @@ module.exports = function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
   const { scenario } = req.body || {};
-  if (!scenario || !Object.prototype.hasOwnProperty.call(SCENARIOS, scenario)) {
+  if (!scenario || !Object.prototype.hasOwnProperty.call(SCENARIOS, scenario))
     return res.status(400).json({ error: `"scenario" must be one of: ${Object.keys(SCENARIOS).join(', ')}` });
-  }
 
   res.json({ budget: SCENARIOS[scenario], scenario });
 };

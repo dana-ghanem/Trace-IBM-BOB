@@ -3,7 +3,12 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/(.*)",     "destination": "/index.html" }
+    { "source": "/api/task/:path*",    "destination": "/api/task" },
+    { "source": "/api/impact/:path*",  "destination": "/api/impact" },
+    { "source": "/api/trace/:path*",   "destination": "/api/trace" },
+    { "source": "/api/rewards/:path*", "destination": "/api/rewards" },
+    { "source": "/api/demo/:path*",    "destination": "/api/demo" },
+    { "source": "/api/:path*",         "destination": "/api/:path*" },
+    { "source": "/(.*)",               "destination": "/index.html" }
   ]
 }
