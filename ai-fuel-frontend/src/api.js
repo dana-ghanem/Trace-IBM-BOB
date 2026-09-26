@@ -1,4 +1,4 @@
-const BASE = 'http://localhost:3001';
+const BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 const TASKS_MOCK = [
   { id: 1, name: 'Add OAuth authentication',           cost: 420, mode: 'Advanced AI',     priority: 'Critical' },
