@@ -1,15 +1,42 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useEffect } from 'react';
 
 export const WorkflowContext = createContext(null);
 
+const SESSION_KEY = 'ai-fuel-workflow';
+
+function loadSession() {
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveSession(data) {
+  try {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(data));
+  } catch {}
+}
+
 export function WorkflowProvider({ children }) {
-  const [request, setRequest] = useState('');
-  const [analysis, setAnalysis] = useState(null);   // result of postTask
-  const [plan, setPlan] = useState(null);            // the chosen plan array
-  const [completion, setCompletion] = useState(null); // set when execution finishes
+  const saved = loadSession();
+  const [request,    setRequestState]    = useState(saved.request    ?? '');
+  const [analysis,   setAnalysisState]   = useState(saved.analysis   ?? null);
+  const [plan,       setPlanState]       = useState(saved.plan       ?? null);
+  const [completion, setCompletionState] = useState(saved.completion ?? null);
+  const [project,    setProjectState]    = useState(saved.project    ?? null);
+  // project: { name, url, type: 'github'|'manual' } | null
+
+  function setRequest(v)    { setRequestState(v);    saveSession({ ...loadSession(), request:    v }); }
+  function setAnalysis(v)   { setAnalysisState(v);   saveSession({ ...loadSession(), analysis:   v }); }
+  function setPlan(v)       { setPlanState(v);       saveSession({ ...loadSession(), plan:       v }); }
+  function setCompletion(v) { setCompletionState(v); saveSession({ ...loadSession(), completion: v }); }
+  function setProject(v)    { setProjectState(v);    saveSession({ ...loadSession(), project:    v }); }
 
   function clearCompletion() {
-    setCompletion(null);
+    setCompletionState(null);
+    saveSession({ ...loadSession(), completion: null });
   }
 
   return (
@@ -18,6 +45,7 @@ export function WorkflowProvider({ children }) {
       analysis, setAnalysis,
       plan, setPlan,
       completion, setCompletion, clearCompletion,
+      project, setProject,
     }}>
       {children}
     </WorkflowContext.Provider>

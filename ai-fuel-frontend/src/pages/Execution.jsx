@@ -6,13 +6,26 @@ import { postTaskProgress, postImpact, postImpactApply, postTaskFinish } from '.
 import BudgetDisplay from '../BudgetDisplay.jsx';
 import './Execution.css';
 
-const STEPS = [
-  { label: 'Analyze project',          mode: 'LIGHTWEIGHT' },
-  { label: 'Design authentication',    mode: 'BALANCED'    },
-  { label: 'Implement authentication', mode: 'ADVANCED'    },
-  { label: 'Run tests',                mode: 'LIGHTWEIGHT' },
-  { label: 'Update documentation',     mode: 'LIGHTWEIGHT' },
-];
+const MODE_MAP = {
+  'Lightweight AI': 'LIGHTWEIGHT',
+  'Balanced AI':    'BALANCED',
+  'Advanced AI':    'ADVANCED',
+};
+
+function stepsFromPlan(plan) {
+  const fitTasks = (plan || []).filter(t => t.fits);
+  if (fitTasks.length === 0) {
+    return [
+      { label: 'Analyze project',   mode: 'LIGHTWEIGHT' },
+      { label: 'Implement changes', mode: 'BALANCED'    },
+      { label: 'Run tests',         mode: 'LIGHTWEIGHT' },
+    ];
+  }
+  const steps = fitTasks.map(t => ({ label: t.name, mode: MODE_MAP[t.mode] || 'BALANCED' }));
+  // Always append a verify step
+  steps.push({ label: 'Verify & finalize', mode: 'LIGHTWEIGHT' });
+  return steps;
+}
 
 function modePill(mode) {
   const cls = mode === 'ADVANCED' ? 'pill-advanced' : mode === 'BALANCED' ? 'pill-balanced' : 'pill-light';
@@ -24,6 +37,7 @@ export default function Execution() {
   const navigate = useNavigate();
   const { plan, analysis, setCompletion } = useContext(WorkflowContext);
   const { budget, max, status, floatBadges, applyBudgetUpdate } = useBudget();
+  const STEPS = stepsFromPlan(plan);
 
   const [currentStep, setCurrentStep] = useState(-1); // -1 = not started
   const [completedSteps, setCompletedSteps] = useState([]);
@@ -53,7 +67,8 @@ export default function Execution() {
 
     timerRef.current = setTimeout(async () => {
       try {
-        const res = await postTaskProgress(idx);
+        // backend accepts steps 0-4; map dynamic step index into that range
+        const res = await postTaskProgress(Math.min(idx, 4));
         if (res.error) {
           setErrorInfo(res.error);
           setPhase('error');

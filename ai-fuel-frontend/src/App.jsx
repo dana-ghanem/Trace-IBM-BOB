@@ -1,6 +1,7 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useContext } from 'react';
 import { BudgetProvider } from './BudgetContext.jsx';
-import { WorkflowProvider } from './WorkflowContext.jsx';
+import { WorkflowProvider, WorkflowContext } from './WorkflowContext.jsx';
 import Sidebar from './Sidebar.jsx';
 import Header from './Header.jsx';
 import Workspace from './pages/Workspace.jsx';
@@ -11,6 +12,16 @@ import Impact from './pages/Impact.jsx';
 import Trace from './pages/Trace.jsx';
 import Rewards from './pages/Rewards.jsx';
 import './App.css';
+
+/** Redirect to / if required workflow state is missing */
+function RequireAnalysis({ children }) {
+  const { analysis } = useContext(WorkflowContext);
+  return analysis ? children : <Navigate to="/" replace />;
+}
+function RequirePlan({ children }) {
+  const { plan } = useContext(WorkflowContext);
+  return plan ? children : <Navigate to="/" replace />;
+}
 
 export default function App() {
   return (
@@ -24,9 +35,9 @@ export default function App() {
               <div className="app-body">
                 <Routes>
                   <Route path="/"          element={<Workspace />} />
-                  <Route path="/analysis"  element={<Analysis />} />
-                  <Route path="/plan"      element={<Plan />} />
-                  <Route path="/execution" element={<Execution />} />
+                  <Route path="/analysis"  element={<RequireAnalysis><Analysis /></RequireAnalysis>} />
+                  <Route path="/plan"      element={<RequireAnalysis><Plan /></RequireAnalysis>} />
+                  <Route path="/execution" element={<RequirePlan><Execution /></RequirePlan>} />
                   <Route path="/impact"    element={<Impact />} />
                   <Route path="/trace"     element={<Trace />} />
                   <Route path="/rewards"   element={<Rewards />} />

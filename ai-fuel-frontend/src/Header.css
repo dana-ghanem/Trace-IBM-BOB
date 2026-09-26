@@ -8,10 +8,38 @@
   flex-shrink: 0;
 }
 
+.header__left {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
 .header__logo {
   display: flex;
   align-items: center;
   gap: 7px;
+}
+
+.header__project {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+.header__project-sep {
+  color: var(--border);
+  margin: 0 6px;
+  font-size: 16px;
+}
+.header__project-icon { opacity: 0.6; font-size: 13px; }
+.header__project-name {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 13px;
+}
+a.header__project-name:hover {
+  color: var(--accent);
+  text-decoration: underline;
 }
 .header__logo-icon { font-size: 18px; }
 .header__logo-text {
