@@ -1,0 +1,41 @@
+.budget-display {
+  position: relative;
+}
+
+.budget-display__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.budget-display__label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  font-family: var(--mono);
+}
+
+.budget-display__number-row {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.budget-display__number {
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.budget-display--compact .budget-display__number {
+  font-size: 15px;
+}
+
+.budget-display__unit {
+  font-size: 11px;
+  color: var(--text-muted);
+}
