@@ -1,9 +1,36 @@
 .analysis {
-  padding: 36px 20px 48px;
+  display: flex;
+  height: 100%;
+  overflow: hidden;
 }
+
 .analysis__inner {
-  max-width: 700px;
-  margin: 0 auto;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: 0;
+}
+
+/* Left column — task list */
+.analysis__left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 24px 24px;
+  overflow-y: auto;
+  border-right: 1px solid var(--border);
+}
+
+/* Right column — decision panel */
+.analysis__right {
+  width: 340px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 24px 24px;
+  overflow-y: auto;
+  background: var(--surface);
 }
 .analysis__empty {
   color: var(--text-muted);
@@ -80,13 +107,6 @@
   margin-bottom: 24px;
   padding: 8px 12px;
   border-left: 3px solid var(--border2);
-}
-
-.analysis__decision {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 20px;
 }
 
 .analysis__stats {
