@@ -1,0 +1,174 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"Segoe UI",system-ui,sans-serif;font-size:14px;line-height:1.6;background:#fff;color:#1f2328;padding:32px 16px}
+.wrap{max-width:760px;margin:0 auto}
+h1{font-size:22px;font-weight:800;margin-bottom:4px}
+.lead{color:#57606a;font-size:13px;margin-bottom:32px}
+h2{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#57606a;margin:28px 0 10px;padding-bottom:6px;border-bottom:1px solid #e5e7eb}
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:8px}
+.stat{background:#f7f8fa;border:1px solid #e5e7eb;border-radius:8px;padding:14px 16px;text-align:center}
+.stat-val{font-size:26px;font-weight:800;color:#1f2328;display:block}
+.stat-label{font-size:11px;color:#57606a;text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+.items{display:flex;flex-direction:column;gap:8px}
+.item{display:flex;gap:12px;align-items:flex-start;background:#f7f8fa;border:1px solid #e5e7eb;border-radius:6px;padding:12px 14px}
+.item-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.item-body{flex:1}
+.item-title{font-weight:600;font-size:13px;margin-bottom:2px}
+.item-desc{font-size:12px;color:#57606a}
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:3px;margin-right:4px;margin-top:4px}
+.t-fix{background:#fef3c7;color:#92400e}
+.t-feat{background:#dbeafe;color:#1d4ed8}
+.t-infra{background:#dcfce7;color:#15803d}
+.t-debug{background:#ede9fe;color:#6d28d9}
+.commit-list{display:flex;flex-direction:column;gap:4px}
+.commit{display:flex;gap:10px;align-items:baseline;font-size:12px;padding:4px 0;border-bottom:1px solid #f0f0f0}
+.commit:last-child{border-bottom:none}
+.commit-hash{font-family:monospace;color:#57606a;flex-shrink:0;width:58px}
+.commit-msg{color:#1f2328}
+.url-box{background:#f7f8fa;border:1px solid #e5e7eb;border-radius:6px;padding:14px 16px;margin-top:8px;font-size:13px}
+.url-box a{color:#3b82d4;text-decoration:none;font-weight:600}
+.url-box a:hover{text-decoration:underline}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid #e5e7eb;text-align:center;font-size:12px;color:#57606a}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>IBM Bob — Contribution Summary</h1>
+  <p class="lead">AI Fuel · Full-stack React + Vercel Serverless · September 2026</p>
+
+  <h2>By the Numbers</h2>
+  <div class="stat-row">
+    <div class="stat"><span class="stat-val">19</span><span class="stat-label">Commits</span></div>
+    <div class="stat"><span class="stat-val">49</span><span class="stat-label">Files changed</span></div>
+    <div class="stat"><span class="stat-val">1,184</span><span class="stat-label">Lines added</span></div>
+    <div class="stat"><span class="stat-val">6</span><span class="stat-label">Features shipped</span></div>
+  </div>
+
+  <h2>Infrastructure &amp; DevOps</h2>
+  <div class="items">
+    <div class="item">
+      <div class="item-icon">🚀</div>
+      <div class="item-body">
+        <div class="item-title">Full-stack Vercel deployment</div>
+        <div class="item-desc">Converted Express backend into 6 Vercel Serverless Functions staying under the Hobby plan's 12-function limit. Set up <code>vercel.json</code> with rewrites routing sub-paths to consolidated handlers. Connected GitHub repo, added watsonx.ai env vars via REST API, and triggered production deployment.</div>
+        <span class="tag t-infra">Infra</span><span class="tag t-infra">Deploy</span>
+      </div>
+    </div>
+    <div class="item">
+      <div class="item-icon">🔗</div>
+      <div class="item-body">
+        <div class="item-title">Git branch merges &amp; repo cleanup</div>
+        <div class="item-desc">Merged <code>backend</code>, <code>hanan</code>, and <code>main</code> branches including resolving unrelated-history conflicts. Moved <code>src/</code>, <code>public/</code>, and <code>index.html</code> into <code>ai-fuel-frontend/</code>. Fixed Vite root config. Updated remote URL when GitHub repo was renamed.</div>
+        <span class="tag t-infra">Git</span>
+      </div>
+    </div>
+    <div class="item">
+      <div class="item-icon">⚙️</div>
+      <div class="item-body">
+        <div class="item-title">Vite proxy for local dev</div>
+        <div class="item-desc">Added server proxy in <code>vite.config.js</code> so <code>/api/</code> calls work locally against <code>localhost:3001</code> and on Vercel without any code change.</div>
+        <span class="tag t-infra">Config</span>
+      </div>
+    </div>
+  </div>
+
+  <h2>Backend &amp; AI Integration</h2>
+  <div class="items">
+    <div class="item">
+      <div class="item-icon">🤖</div>
+      <div class="item-body">
+        <div class="item-title">Fixed watsonx.ai integration</div>
+        <div class="item-desc">Diagnosed 403 error (project not associated with WML instance). After WML was linked, discovered <code>ibm/granite-13b-instruct-v2</code> was deprecated. Found available models in the Frankfurt region and switched to <code>meta-llama/llama-3-3-70b-instruct</code>. Fixed JSON parsing to extract array from model response using regex instead of brittle markdown stripping.</div>
+        <span class="tag t-debug">Debug</span><span class="tag t-fix">Fix</span>
+      </div>
+    </div>
+    <div class="item">
+      <div class="item-icon">🔄</div>
+      <div class="item-body">
+        <div class="item-title">Stateless serverless API design</div>
+        <div class="item-desc">Redesigned all API handlers to be stateless — budget, points, and resets are passed from the client in request bodies instead of relying on shared in-memory state, making them compatible with serverless execution.</div>
+        <span class="tag t-infra">Architecture</span>
+      </div>
+    </div>
+  </div>
+
+  <h2>Frontend Features</h2>
+  <div class="items">
+    <div class="item">
+      <div class="item-icon">💾</div>
+      <div class="item-body">
+        <div class="item-title">Session &amp; budget persistence</div>
+        <div class="item-desc">Saved <code>WorkflowContext</code> (request, analysis, plan, project) to <code>sessionStorage</code> and budget state to <code>localStorage</code>. Refreshing the page no longer resets credits or loses the current task flow.</div>
+        <span class="tag t-feat">Feature</span>
+      </div>
+    </div>
+    <div class="item">
+      <div class="item-icon">🛡️</div>
+      <div class="item-body">
+        <div class="item-title">Route guards</div>
+        <div class="item-desc">Added <code>RequireAnalysis</code> and <code>RequirePlan</code> wrapper components that redirect to <code>/</code> when navigating directly to <code>/analysis</code>, <code>/plan</code>, or <code>/execution</code> without valid state — preventing blank broken pages.</div>
+        <span class="tag t-fix">Fix</span>
+      </div>
+    </div>
+    <div class="item">
+      <div class="item-icon">📁</div>
+      <div class="item-body">
+        <div class="item-title">Project picker</div>
+        <div class="item-desc">Added a "Connect project" button on the Workspace page. Accepts a GitHub URL (auto-parses <code>user/repo</code>) or manual project name. Connected project shows as a breadcrumb in the header across all pages, persisted in sessionStorage.</div>
+        <span class="tag t-feat">Feature</span>
+      </div>
+    </div>
+    <div class="item">
+      <div class="item-icon">📋</div>
+      <div class="item-body">
+        <div class="item-title">Real execution steps + task side panel</div>
+        <div class="item-desc">Execution steps now derive from the actual plan tasks instead of hardcoded auth steps. Right panel replaced with a live task checklist showing ✓ done, ● active, ○ pending, and – deferred tasks with "needs +N credits" hints for deferred items.</div>
+        <span class="tag t-feat">Feature</span>
+      </div>
+    </div>
+    <div class="item">
+      <div class="item-icon">📐</div>
+      <div class="item-body">
+        <div class="item-title">Analysis page two-column layout</div>
+        <div class="item-desc">Redesigned the Analysis page from a single scrolling column into a two-column split-screen layout — task list on the left, budget decision panel on the right — filling the full viewport height.</div>
+        <span class="tag t-fix">Layout</span>
+      </div>
+    </div>
+  </div>
+
+  <h2>All Commits</h2>
+  <div class="commit-list">
+    <div class="commit"><span class="commit-hash">bdb4152</span><span class="commit-msg">ci: redeploy with env vars</span></div>
+    <div class="commit"><span class="commit-hash">c0c8554</span><span class="commit-msg">fix: consolidate to 6 serverless functions (Vercel Hobby limit)</span></div>
+    <div class="commit"><span class="commit-hash">cc879ee</span><span class="commit-msg">feat: convert to Vercel serverless functions, full-stack single deploy</span></div>
+    <div class="commit"><span class="commit-hash">ea7d7dd</span><span class="commit-msg">feat: add vercel.json and env-based API URL for deployment</span></div>
+    <div class="commit"><span class="commit-hash">a9cf73f</span><span class="commit-msg">fix: persist budget in localStorage so refresh doesn't reset credits</span></div>
+    <div class="commit"><span class="commit-hash">ae62564</span><span class="commit-msg">feat: execution side panel shows task checklist with done/active/deferred</span></div>
+    <div class="commit"><span class="commit-hash">7f608dc</span><span class="commit-msg">fix: analysis page two-column layout fills viewport</span></div>
+    <div class="commit"><span class="commit-hash">e2469e5</span><span class="commit-msg">feat: route guards, session persistence, project picker, real execution steps</span></div>
+    <div class="commit"><span class="commit-hash">8d9a6e6</span><span class="commit-msg">fix: switch to llama-3-3-70b-instruct, robust JSON extraction</span></div>
+    <div class="commit"><span class="commit-hash">d81bda1</span><span class="commit-msg">fix: move index.html into ai-fuel-frontend and update vite root</span></div>
+    <div class="commit"><span class="commit-hash">35dbfd8</span><span class="commit-msg">refactor: move src/ and public/ into ai-fuel-frontend/</span></div>
+    <div class="commit"><span class="commit-hash">6cfef5e</span><span class="commit-msg">chore: remove empty ai-fuel-frontend placeholder folder</span></div>
+    <div class="commit"><span class="commit-hash">68fb569</span><span class="commit-msg">chore: resolve package-lock.json conflict</span></div>
+    <div class="commit"><span class="commit-hash">e37adf7</span><span class="commit-msg">merge: sync with origin/main, keep remote README</span></div>
+    <div class="commit"><span class="commit-hash">e9565f2</span><span class="commit-msg">merge: backend branch into main</span></div>
+    <div class="commit"><span class="commit-hash">24d0db1</span><span class="commit-msg">chore: track ai-fuel-backend files on main</span></div>
+  </div>
+
+  <h2>Live Deployment</h2>
+  <div class="url-box">
+    🌐 Production URL: <a href="https://trace-ibm-bob.vercel.app" target="_blank">https://trace-ibm-bob.vercel.app</a><br />
+    <span style="font-size:12px;color:#57606a;margin-top:4px;display:block">Frontend + Serverless API · GitHub connected · watsonx.ai env vars set · Auto-deploys on push to main</span>
+  </div>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+</body>
+</html>
